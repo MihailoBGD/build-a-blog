@@ -19,8 +19,13 @@ class Blog(db.Model):
         self.title = title
         self.text = text 
 
-@app.route('/')
+@app.route('/blog')
 def index():
+    if request.args.get('id'):
+        blog_id = request.args.get('id')
+        blog = Blog.query.filter_by(id = blog_id).first()
+        return render_template('single-blog.html', title = "build-a-blog", blog = blog )
+
 
     blogs = Blog.query.all()
     '''
@@ -30,7 +35,7 @@ def index():
                             title="Build-a-blog",
                             blogs = blogs)
 
-@app.route('/new-blog-entry', methods=['POST', 'GET'])
+@app.route('/newpost', methods=['POST', 'GET'])
 def new_blog_entry():
     if request.method == 'POST':
         title_error = ""
@@ -61,17 +66,21 @@ def new_blog_entry():
 
     return render_template('new-blog-entry.html',title="Add-a-blog")
 
+#@app.route('/single-blog', methods=['POST', 'GET'])
+#def single-blog():
+
+
+
+
+if __name__ == '__main__':
+    app.run()
+
+    
 
 '''
 @app.route('/blog-main', methods=['POST', 'GET'])
 def blog-main():
-    
-
-@app.route('/single-blog', methods=['POST', 'GET'])
-def single-blog():
-'''    
-
-
+ 
 @app.route('/delete-task', methods=['POST'])
 def delete_task():
 
@@ -87,10 +96,9 @@ def delete_task():
 if __name__ == '__main__':
     app.run()
 
-'''
     if request.method == 'POST':
         task_name = request.form['task']
         new_task = Blog(task_name)
         db.session.add(new_task)
         db.session.commit()
-'''    
+'''  
